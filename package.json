@@ -1,0 +1,18 @@
+{
+  "name": "backend-3",
+  "version": "1.0.0",
+  "description": "This is backend professional setup project",
+  "keywords": [
+    "backend",
+    "javascript"
+  ],
+  "license": "ISC",
+  "author": "Yusuf Shaikh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
+
+
