@@ -9,12 +9,12 @@ const registerUser = aysncHandler(async (req, res) => {
   const { fullname, username, email, password } = req.body;
 
   if (
-    [fullname, username, email, password].some((filed) => filed?.trime() === "")
+    [fullname, username, email, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "fullfil all required fields");
   }
 
-  const exitedUser = User.findOne({
+  const exitedUser = await  User.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -23,7 +23,12 @@ const registerUser = aysncHandler(async (req, res) => {
   }
 
   const avatarLocalPath = req.files?.avatar[0]?.path
-  const coverImageLocalPath = req.files?.coverImage[0]?.path 
+//   const coverImageLocalPath = req.files?.coverImage[0]?.path 
+
+let coverImageLocalPath;
+if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+    coverImageLocalPath = req.files.coverImage[0].path
+}
 
   if(!avatarLocalPath){
     throw new ApiError(400, " avatar file is required")
@@ -36,16 +41,18 @@ const registerUser = aysncHandler(async (req, res) => {
     throw new ApiError(400, "avatar file is required")
  }
 
- const user = User.create({
-    fullname,
-    email,
-    username: username.toLowerCase,
-    avatar: avatar.url,
-    coverImage: coverImage?.url ||  "",
+ const user = await User.create({
+         fullname,
+        avatar: avatar.url,
+        coverImage: coverImage?.url || "",
+        email, 
+        password,
+        username: username.toLowerCase()
  })
 
+
  const createdUser = await User.findById(user._id).select(
-    "-password -refeshToken"
+      "-password -refreshToken"
  )
 
  if(!createdUser){
@@ -57,6 +64,7 @@ const registerUser = aysncHandler(async (req, res) => {
  )
 
 });
+
 
 export { registerUser };
 
