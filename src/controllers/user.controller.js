@@ -66,9 +66,31 @@ if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.leng
 });
 
 
-export { registerUser };
+
+const loginUser = aysncHandler(async (req, res)=>{
+    const {email, username, password} = req.body
+
+})
+
 
 /*
+for login:
+
+-res.body -> data
+-username or email
+-find the user
+-password check 
+-access and refesh token
+-send cookie 
+
+*/
+
+
+
+export { registerUser, loginUser };
+
+/*
+for register:
 
 -get user detail from frontend
 -validation - not empty
