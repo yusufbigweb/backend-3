@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-
+//generat access and refresh token using this method
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId)
@@ -141,37 +141,7 @@ const logoutUser = aysncHandler(async (req, res)=> {
     .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
-/*
-for login:
-
--res.body -> data
--username or email
--find the user
--password check 
--access and refesh token
--send cookie 
-
-*/
 
 
 
 export { registerUser, loginUser, logoutUser };
-
-/*
-for register:
-
--get user detail from frontend
--validation - not empty
--check if user alredy exit: username, email
--check for image and avatar
--upload them to cloudinary, avatar
--create user odject in db - create entry in db
--remove password and refesh token field from response
--check for user creation
--return response
-
-*/
-
-// if(fullname === ""){
-//         throw new ApiError(400, "fullname is required")
-//     }
