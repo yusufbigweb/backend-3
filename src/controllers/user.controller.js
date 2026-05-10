@@ -9,7 +9,10 @@ const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId)
     const accessToken = user.generateAccessToken()
-    const refreshToken = user.generateRereshToken() 
+    const refreshToken = user.generateRefreshToken()
+    
+    console.log("access:", accessToken);
+    console.log("ref:", refreshToken);
 
     user.refreshToken = refreshToken
     await user.save({validateBeforeSave: false})
@@ -17,6 +20,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     return {accessToken, refreshToken}
 
   } catch (error) {
+    console.error("Real error:", error);
     throw new ApiError(500, "Someting went wronge while genrating access and refresh token")
   }
 }
@@ -87,7 +91,7 @@ if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.leng
 const loginUser = aysncHandler(async (req, res)=>{
     const {email, username, password} = req.body;
 
-    if(!email || !username) {
+    if(!email && !username) {
       throw new ApiError(400, "email or username is required")
     }
 
@@ -136,8 +140,8 @@ const logoutUser = aysncHandler(async (req, res)=> {
     }
 
     return res.status(200)
-    .clearCookie("accessToken", accessToken)
-    .clearCookie("refreshToken", refreshToken)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
